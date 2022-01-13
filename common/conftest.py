@@ -71,18 +71,33 @@ def get_ini(pytestconfig):
 import os
 
 import pytest
-import yaml
+# import yaml
 # 作者-上海悠悠 QQ交流群:717225969
 # blog地址 https://www.cnblogs.com/yoyoketang/
 
+#
+# @pytest.fixture(scope="session", autouse=True)
+# def dbinfo(request):
+#     dbfile = os.path.join(request.config.rootdir,
+#                         "config",
+#                         "dbenv.yml")
+#     print("dbinfo file path :%s" % dbfile)
+#     with open(dbfile) as f:
+#         dbenv_config = yaml.load(f.read(), Loader=yaml.SafeLoader)
+#     print(dbenv_config)
+#     return dbenv_config
 
-@pytest.fixture(scope="session", autouse=True)
-def dbinfo(request):
-    dbfile = os.path.join(request.config.rootdir,
-                        "config",
-                        "dbenv.yml")
-    print("dbinfo file path :%s" % dbfile)
-    with open(dbfile) as f:
-        dbenv_config = yaml.load(f.read(), Loader=yaml.SafeLoader)
-    print(dbenv_config)
-    return dbenv_config
+# 工厂化的fixture
+@pytest.fixture
+def make_customer_record():
+    created_records = []
+    def _make_customer_record(name):
+        record = {"name": name, "order": [1,2,3,4,5]}
+        created_records.append(record)
+        return record
+    yield _make_customer_record
+
+    for record in created_records:
+        record
+
+# 工厂化的fixture的场景用例
