@@ -100,4 +100,24 @@ def make_customer_record():
     for record in created_records:
         record
 
-# 工厂化的fixture的场景用例
+# 其中包含命令行选项和测试函数的参数化，向pytest.ini添加一个参数
+def pytest_addoption1(parser):
+    parser.addoption(
+        "--stringinput",
+        action="append",
+        default=[],
+        help="list of stringinputs to pass to test functions",
+    )
+
+# def pytest_generate_tests(metafunc):
+#     if "stringinput" in metafunc.fixturenames:
+#         metafunc.parametrize("stringinput", metafunc.config.getoption("stringinput"))
+
+
+def pytest_generate_tests(metafunc):
+    """ generate (multiple) parametrized calls to a test function."""
+    if "param" in metafunc.fixturenames:
+        metafunc.parametrize("param",
+                             metafunc.module.test_data,
+                             ids=metafunc.module.names,
+                             scope="function")

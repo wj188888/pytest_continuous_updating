@@ -43,7 +43,7 @@ def firefox():
 
 @pytest.fixture(params=['chrome', 'firefox'])
 def driver(request):
-    '''启动浏览器参数化'''
+    '''启动浏览器参数化,关键词getfixturevalue'''
     return request.getfixturevalue(request.param)
 
 def test_foo1(driver):
