@@ -6,11 +6,34 @@ def pytest_addoption(parser):
     parser.addoption(
         "--cmdopt", action="store", default="type1", help="my option: type1 or type2"
     )
-
+    # 添加参数到pytest.ini，这是对pyest.ini的url进行添加
+    parser.addini('url', type=None, default="http://49.235.92.12:8200/", help='添加 url 访问地址参数')
+    '''解释上一行代码；
+        type参数的几种类型：
+            默认是：None
+            还有其他的选项None, "pathlist", "args", "linelist", "bool"
+            AAA:    type=None 默认读的是字符串
+            AAA:    type="pathlist" 可以设置多个路径，会自动拼接ini文件这一层目录
+            AAA:    type="args" 多个参数
+            AAA:    type="linelist" 可以是多个命令行参数
+            AAA:    type="bool" bool值，设置1或0
+    '''
 @pytest.fixture
 def cmdopt(request):
     return request.config.getoption("--cmdopt")
 
+# 获取 pytest.ini 配置参数;如果某一天我们的测试环境变了，这个时候不需要去改代码，只需在pytest.ini配置一个环境地址
+'''
+# pytest.ini配置文件
+[pytest]
+
+url = https://www.cnblogs.com/yoyoketang/
+'''
+@pytest.fixture(scope="session")
+def home_url(pytestconfig):
+    url = pytestconfig.getini('url')
+    print("\n读取到配置文件的url地址：%s" % url)
+    return url
 # request.module
 # @pytest.fixture(scope="module")
 # def smtp(request):
@@ -43,3 +66,23 @@ def get_ini(pytestconfig):
     # print("获取到markers ：%s" % log_cli)
     addopts = pytestconfig.getini('addopts')
     print("获取到addopts的配置：%s " % addopts)
+
+# 读取项目的根目录
+import os
+
+import pytest
+import yaml
+# 作者-上海悠悠 QQ交流群:717225969
+# blog地址 https://www.cnblogs.com/yoyoketang/
+
+
+@pytest.fixture(scope="session", autouse=True)
+def dbinfo(request):
+    dbfile = os.path.join(request.config.rootdir,
+                        "config",
+                        "dbenv.yml")
+    print("dbinfo file path :%s" % dbfile)
+    with open(dbfile) as f:
+        dbenv_config = yaml.load(f.read(), Loader=yaml.SafeLoader)
+    print(dbenv_config)
+    return dbenv_config
