@@ -45,17 +45,17 @@ def home_url(pytestconfig):
 #     smtp.close()
 
 # 第四部分：request的相关成员对象
-@pytest.fixture(autouse=True)
-def print_request(request):
-    print("\n=======================request start=================================")
-    print(request.module)
-    print(request.function)
-    print(request.cls)
-    print(request.fspath)
-    print(request.fixturenames)
-    print(request.fixturename)
-    print(request.scope)
-    print("\n=======================request end=================================")
+# @pytest.fixture(autouse=True)
+# def print_request(request):
+#     print("\n=======================request start=================================")
+#     print(request.module)
+#     print(request.function)
+#     print(request.cls)
+#     print(request.fspath)
+#     print(request.fixturenames)
+#     print(request.fixturename)
+#     print(request.scope)
+#     print("\n=======================request end=================================")
 
 # 第五部分：pytestconfig
 @pytest.fixture(autouse=True)
@@ -101,13 +101,13 @@ def make_customer_record():
         record
 
 # 其中包含命令行选项和测试函数的参数化，向pytest.ini添加一个参数
-def pytest_addoption1(parser):
-    parser.addoption(
-        "--stringinput",
-        action="append",
-        default=[],
-        help="list of stringinputs to pass to test functions",
-    )
+# def pytest_addoption1(parser):
+#     parser.addoption(
+#         "--stringinput",
+#         action="append",
+#         default=[],
+#         help="list of stringinputs to pass to test functions",
+#     )
 
 # def pytest_generate_tests(metafunc):
 #     if "stringinput" in metafunc.fixturenames:
